@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back"
+    tools:context=".PlayerActivity">
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="16dp"
+        android:background="#00FFFFFF"
+        android:scaleType="centerCrop"
+        android:tint="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/textViewSubtitles"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        android:src="@drawable/ic_baseline_mic_24" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wanna seek to a topic ?"
+        android:textColor="@color/purple_200"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageButton"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageButton" />
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/exo_black_opacity_70"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:show_buffering="always">
+
+    </com.google.android.exoplayer2.ui.PlayerView>
+
+    <TextView
+        android:id="@+id/textViewSubtitles"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/poppins"
+        android:gravity="center"
+        android:text="Scene Describer"
+        android:textColor="@color/teal_700"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
