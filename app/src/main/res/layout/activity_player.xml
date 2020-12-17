@@ -7,19 +7,34 @@
     android:background="@drawable/back"
     tools:context=".PlayerActivity">
 
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        android:checked="true"
+        android:text="Scene describer volume"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="50dp"
+        android:layout_width="40dp"
         android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginBottom="16dp"
         android:background="#00FFFFFF"
         android:scaleType="centerCrop"
-        android:tint="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/textViewSubtitles"
+        android:src="@drawable/ic_baseline_mic_24"
+        android:tint="@color/purple_200"
+        app:layout_constraintBottom_toTopOf="@+id/sceneButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        android:src="@drawable/ic_baseline_mic_24" />
+        app:layout_constraintStart_toEndOf="@+id/textView" />
 
     <TextView
         android:id="@+id/textView"
@@ -35,6 +50,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageButton" />
 
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Describe me the scene !"
+        android:textColor="@color/purple_200"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/sceneButton"
+        app:layout_constraintEnd_toStartOf="@+id/sceneButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/textViewSubtitles"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sceneButton" />
+
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
@@ -44,9 +74,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/exo_black_opacity_70"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton"
+        app:layout_constraintBottom_toTopOf="@+id/switch1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,18 +89,29 @@
         android:id="@+id/textViewSubtitles"
         android:layout_width="0dp"
         android:layout_height="100dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="4dp"
         android:fontFamily="@font/poppins"
         android:gravity="center"
-        android:text="Scene Describer"
+        android:text="Whats happening in the Video..."
         android:textColor="@color/teal_700"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/sceneButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:background="#00FFFFFF"
+        android:scaleType="centerCrop"
+        android:tint="@color/purple_200"
+        app:layout_constraintBottom_toTopOf="@+id/textViewSubtitles"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
+        app:srcCompat="@drawable/ic_baseline_wb_sunny_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,24 +4,37 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.sammy.Api.Api;
+import com.app.sammy.Api.ApiAudio;
+import com.app.sammy.Models.AudioRequest.AudIdReq;
+import com.app.sammy.Models.AudioRequest.Word;
+import com.app.sammy.Models.Finalrequest.Caption;
+import com.app.sammy.Models.Finalrequest.IdReq;
+import com.app.sammy.Models.Responce;
 import com.app.sammy.Models.TimeStamps;
+import com.app.sammy.Models.sceneDes;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -36,170 +49,239 @@ import java.util.TimerTask;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static java.lang.StrictMath.max;
 
 public class PlayerActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
-    private PlayerView playerView;
-    public SimpleExoPlayer player;
-    private ImageButton imageButton;
-    private TextView textViewSubtitles;
-    private TextToSpeech textToSpeech;
-
-    final String media_url = "https://thepaciellogroup.github.io/AT-browser-tests/video/ElephantsDream.mp4";
-    private boolean playWhenReady = true;
-    private int currentWindow = 0;
-    private long playbackPosition = 0;
+    PlayerView playerView;
+    SimpleExoPlayer player;
+    ImageButton imageButton,sceneButton;
+    TextView textViewSubtitles;
+    TextToSpeech textToSpeech;
+    String media_url = null ,media_id = null ,media_id2 = null;
     List<TimeStamps> list, caption;
-    public int temp = 0;
+    IdReq idReq;
+    AudIdReq audIdReq;
+    ProgressDialog pDialog;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    Switch aSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_player );
-
         getSupportActionBar().setDisplayHomeAsUpEnabled( true );
         getSupportActionBar().setDisplayShowHomeEnabled( true );
 
+        media_url = getIntent().getStringExtra("LINK");
+        media_id = getIntent().getStringExtra("ID1");
+        media_id2 = getIntent().getStringExtra("ID2");
+
         playerView = findViewById( R.id.video_view );
         imageButton = findViewById( R.id.imageButton );
+        sceneButton = findViewById( R.id.sceneButton );
         textViewSubtitles = findViewById( R.id.textViewSubtitles );
-        textToSpeech = new TextToSpeech( this, this );
+        aSwitch= findViewById(R.id.switch1);
 
-        list = new ArrayList<>();
-        caption = new ArrayList<>();
-        list.add( new TimeStamps( "demo", "2319" ) );
-        list.add( new TimeStamps( "closed", "3119" ) );
-        list.add( new TimeStamps( "reyes", "3559" ) );
-        list.add( new TimeStamps( "why", "5139" ) );
-        list.add( new TimeStamps( "now", "5519" ) );
-        list.add( new TimeStamps( "okay", "6000" ) );
-        list.add( new TimeStamps( "good", "7759" ) );
-        list.add( new TimeStamps( "what", "10059" ) );
-        list.add( new TimeStamps( "do", "10199" ) );
-        list.add( new TimeStamps( "you", "10199" ) );
-        list.add( new TimeStamps( "see", "10199" ) );
-        list.add( new TimeStamps( "at", "10199" ) );
-        list.add( new TimeStamps( "your", "10699" ) );
-        list.add( new TimeStamps( "left", "10859" ) );
-        list.add( new TimeStamps( "side", "11239" ) );
-        list.add( new TimeStamps( "maillotins", "11500" ) );
-        list.add( new TimeStamps( "really", "15880" ) );
-        list.add( new TimeStamps( "no", "17500" ) );
-        list.add( new TimeStamps( "nothing", "17710" ) );
-        list.add( new TimeStamps( "at", "17900" ) );
-        list.add( new TimeStamps( "all", "18000" ) );
-        list.add( new TimeStamps( "really", "18000" ) );
-        list.add( new TimeStamps( "and", "19000" ) );
-        list.add( new TimeStamps( "at", "19000" ) );
-        list.add( new TimeStamps( "your", "19959" ) );
-        list.add( new TimeStamps( "right", "20119" ) );
-        list.add( new TimeStamps( "what", "20340" ) );
-        list.add( new TimeStamps( "do", "20699" ) );
-        list.add( new TimeStamps( "you", "20939" ) );
-        list.add( new TimeStamps( "see", "21159" ) );
-        list.add( new TimeStamps( "at", "21299" ) );
-        list.add( new TimeStamps( "your", "21420" ) );
-        list.add( new TimeStamps( "right", "21600" ) );
-        list.add( new TimeStamps( "side", "21899" ) );
-        list.add( new TimeStamps( "o", "22000" ) );
-        list.add( new TimeStamps( "the", "24000" ) );
-        list.add( new TimeStamps( "same", "24000" ) );
-        list.add( new TimeStamps( "project", "25139" ) );
-        list.add( new TimeStamps( "de", "27000" ) );
-        list.add( new TimeStamps( "same", "27000" ) );
-        list.add( new TimeStamps( "nothing", "28000" ) );
-        list.add( new TimeStamps( "great", "29500" ) );
+        initDialog();
+        showpDialog();
+        getData();
 
-
-        caption.add( new TimeStamps( "the background is black", "1200" ) );
-        caption.add( new TimeStamps( "a man is looking at the camera", "13833" ) );
-        caption.add( new TimeStamps( "a man is holding a dog", "15500" ) );
-        caption.add( new TimeStamps( "two men are smiling", "20542" ) );
-        caption.add( new TimeStamps( "two men are standing", "20583" ) );
-        caption.add( new TimeStamps( "a man is standing", "23458" ) );
-        caption.add( new TimeStamps( "the background is black", "30132" ) );
-        caption.add( new TimeStamps( "celebrating 10 years of oqen movies", "32238" ) );
-
-        initializePlayer();
         imageButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getSpeechInput();
             }
         } );
-        if (player != null) {
-            Timer timer = new Timer();
-            timer.scheduleAtFixedRate( new TimerTask() {
-                @Override
-                public void run() {
-                    runOnUiThread( new Runnable() {
-                        @Override
-                        public void run() {
-                            textViewSubtitles.post( new Runnable() {
-                                @Override
-                                public void run() {
-                                    for (TimeStamps t : caption) {
-                                        if (player.getContentPosition() >= Integer.parseInt( t.getTime() ) && (player.getContentPosition() - 1000) <= Integer.parseInt( t.getTime() )) {
-                                            textViewSubtitles.setText( t.getTag() );
-                                            texttoSpeak( t.getTag() );
-                                        }
-                                    }
-                                }
-                            } );
-                        }
-                    } );
+        sceneButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(player==null) return;
+                showpDialog();
+                getSceneSearch(player.getCurrentPosition());
+            }
+        } );
+
+
+        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+               if (status == TextToSpeech.SUCCESS){
+                   textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                       @Override
+                       public void onStart(String utteranceId) {
+                           Log.i("XXX", "Sucess");
+
+                       }
+
+                       @Override
+                       // this method will always called from a background thread.
+                       public void onDone(String utteranceId) {
+                           Log.i("XXX", "Sucess");
+                           runOnUiThread(new Runnable() {
+                               @Override
+                               public void run() {
+                                   // *** toast will not work if called from a background thread ***
+                                   Toast.makeText(PlayerActivity.this,"onDone working.",Toast.LENGTH_LONG).show();
+                               }
+                           });
+                       }
+
+                       @Override
+                       public void onError(String utteranceId) {
+                            }
+                   });
+               }
+               else{
+                   Log.i("XXX", "Failed");
+               }
+            }
+        });
+        //Declare the timer
+        Timer t = new Timer();
+        t.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                speakCaptions();
+            }
+        }, 0, 1000);
+    }
+
+    //For fetching Data
+    private void getData() {
+        Call<IdReq> call;
+        call =  Api.getService().getTimestamps(media_id,"sd");
+        call.enqueue(new Callback<IdReq>() {
+            @Override
+            public void onResponse(Call<IdReq> call, Response<IdReq> response) {
+                if(response.isSuccessful() && response!=null &&response.body().getProgress()==100){
+                    idReq=response.body();
+                    getAudio();
                 }
-            }, 0, 1000 );
-        }
+                else{
+                    Toast.makeText( PlayerActivity.this, "Doing video! " +response.body().getProgress()+"% Completed",Toast.LENGTH_SHORT ).show();
+                    getData();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IdReq> call, Throwable t) {
+                Toast.makeText( PlayerActivity.this, "Failed! Retrying.." ,Toast.LENGTH_SHORT ).show();
+                getData();
+            }
+        });
+    }
+    private void getAudio() {
+        Call<AudIdReq> call;
+        call = ApiAudio.getService().getSubtitles(media_id2);
+        call.enqueue(new Callback<AudIdReq>() {
+            @Override
+            public void onResponse(Call<AudIdReq> call, Response<AudIdReq> response) {
+                if(response.isSuccessful() && response!=null &&response.body().getProgress()==100){
+                    audIdReq=response.body();
+                    hidepDialog();
+                    initializePlayer();
+                    fillData();
+                }
+                else{
+                    Toast.makeText( PlayerActivity.this, "Doing audio! " +response.body().getProgress()+"% Completed",Toast.LENGTH_SHORT ).show();
+                    getAudio();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AudIdReq> call, Throwable t) {
+                Toast.makeText( PlayerActivity.this, "Failed! Retrying.." ,Toast.LENGTH_SHORT ).show();
+                getAudio();
+            }
+        });
+    }
+    private void getSceneSearch(long time) {
+        Call< sceneDes > call;
+        call = Api.getService().getSceneDescribed(media_url,(time/1000),"true");
+        call.enqueue(new Callback<sceneDes>() {
+            @Override
+            public void onResponse(Call<sceneDes> call, Response<sceneDes> response) {
+                if(response.isSuccessful() && response!=null){
+                    String s = response.body().getCaption();
+                    hidepDialog();
+                    if(s.toLowerCase().contains("text") || s.toLowerCase().contains("logo") ){
+                        List< Caption > captionList = idReq.getResponseFinal().getCaptions();
+                        for( Caption c : captionList){
+                            if(c.getTime()==time){
+                                texttoSpeak(c.getOcr());
+                                break;
+                            }
+                        }
+                    }
+                    else
+                        texttoSpeak(s);
+                }
+                else{
+                    getSceneSearch(time);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<sceneDes> call, Throwable t) {
+                Toast.makeText( PlayerActivity.this, "Failed! Retrying.." ,Toast.LENGTH_SHORT ).show();
+                getSceneSearch(time);
+            }
+        });
     }
 
     private void initializePlayer() {
-        temp = 0;
-        player = new SimpleExoPlayer.Builder( this ).build();
+        player = new SimpleExoPlayer.Builder( PlayerActivity.this ).build();
         MediaItem mediaItem = MediaItem.fromUri( media_url );
         player.setMediaItem( mediaItem );
-        player.setPlayWhenReady( playWhenReady );
-        player.seekTo( currentWindow, playbackPosition );
+        player.setPlayWhenReady(true);
         player.prepare();
         playerView.setPlayer( player );
         getSupportActionBar().setTitle( Uri.parse( media_url ).getLastPathSegment().toString() );
     }
+    private void fillData() {
+        list = new ArrayList<>();
+        caption = new ArrayList<>();
+        List< Word > wordList = audIdReq.getAudResponseFinal().getWords();
+        List< Caption > captionList = idReq.getResponseFinal().getCaptions();
+        for( Word word : wordList){
+            list.add( new TimeStamps(word.getWord(),word.getTime()));
+        }
+        for( Caption c : captionList){
+            list.add(new TimeStamps(c.getOcr(),c.getTime()));
+            for(String s: c.getTags())
+                list.add(new TimeStamps(s,c.getTime()));
+        }
+        for( Caption c : captionList){
+            caption.add(new TimeStamps(c.getCaptions(),c.getTime()));
+        }
+    }
+    private void speakCaptions(){
+        if(player==null || !player.isPlaying() || aSwitch==null ) return;
+        for (TimeStamps t : caption) {
+            if (player.getContentPosition() >= t.getTime() && (player.getContentPosition() - 1000) <= t.getTime()) {
+                textViewSubtitles.setText( t.getTag() );
+                if(aSwitch.isChecked()){
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (Util.SDK_INT < 24) {
-            releasePlayer();
+                    if(t.getTag().toLowerCase().contains("text") || t.getTag().toLowerCase().contains("logo") ){
+                        List< Caption > captionList = idReq.getResponseFinal().getCaptions();
+                        for( Caption c : captionList){
+                            if(c.getTime()==t.getTime()){
+                                texttoSpeak(c.getOcr());
+                                break;
+                            }
+                        }
+                    }
+                    else
+                        texttoSpeak(t.getTag());
+                }
+            }
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (Util.SDK_INT >= 24) {
-            releasePlayer();
-        }
-    }
-
-    @SuppressLint("InlinedApi")
-    private void hideSystemUi() {
-        playerView.setSystemUiVisibility( View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION );
-    }
-
-    private void releasePlayer() {
-        if (player != null) {
-            playWhenReady = player.getPlayWhenReady();
-            playbackPosition = player.getCurrentPosition();
-            currentWindow = player.getCurrentWindowIndex();
-            player.release();
-            player = null;
-        }
-    }
 
     //For voice input..
     public void getSpeechInput() {
@@ -214,36 +296,6 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
             Toast.makeText( this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT ).show();
         }
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult( requestCode, resultCode, data );
-        List<String> timeList = new ArrayList<>();
-
-        switch (requestCode) {
-            case 10:
-                if (resultCode == RESULT_OK && data != null) {
-                    ArrayList<String> result = data.getStringArrayListExtra( RecognizerIntent.EXTRA_RESULTS );
-                    String search = result.get( 0 );
-
-                    for (int i = 0; i < list.size(); i++) {
-                        if (search.toLowerCase().trim().contains( list.get( i ).getTag().toString().toLowerCase() )) {
-                            long millis = Integer.parseInt( String.valueOf( list.get( i ).getTime() ) );
-                            @SuppressLint("DefaultLocale") String hms = String.format( "%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours( millis ),
-                                    TimeUnit.MILLISECONDS.toMinutes( millis ) - TimeUnit.HOURS.toMinutes( TimeUnit.MILLISECONDS.toHours( millis ) ),
-                                    TimeUnit.MILLISECONDS.toSeconds( millis ) - TimeUnit.MINUTES.toSeconds( TimeUnit.MILLISECONDS.toMinutes( millis ) ) );
-                            timeList.add( hms );
-                        }
-                    }
-                }
-                break;
-        }
-        if (timeList.isEmpty()) {
-            Toast.makeText( PlayerActivity.this, "No record found!", Toast.LENGTH_SHORT ).show();
-        }
-        showPopUp( timeList );
-    }
-
     private void showPopUp(List<String> timeList) {
 
         //Creating the instance of PopupMenu
@@ -269,9 +321,61 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
 
         popup.show();//showing popup menu
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult( requestCode, resultCode, data );
+        List<String> timeList = new ArrayList<>();
+
+        if (requestCode == 10) {
+            if (resultCode == RESULT_OK && data != null) {
+                ArrayList< String > result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String search = result.get(0);
+
+                for (int i = 0; i < list.size(); i++) {
+                    if (search.toLowerCase().trim().contains(list.get(i).getTag().toString().toLowerCase())) {
+                        long millis = Integer.parseInt(String.valueOf(list.get(i).getTime()));
+                        @SuppressLint("DefaultLocale") String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
+                                TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
+                                TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+                        timeList.add(hms);
+                    }
+                }
+            }
+        }
+        if (timeList.isEmpty()) {
+            Toast.makeText( PlayerActivity.this, "No record found!", Toast.LENGTH_SHORT ).show();
+        }
+        showPopUp( timeList );
+    }
+
+    //For Loading Screen ..
+    protected void initDialog() {
+
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Loading");
+        pDialog.setCancelable(true);
+    }
+    protected void showpDialog() {
+
+        if (!pDialog.isShowing()) pDialog.show();
+    }
+    protected void hidepDialog() {
+
+        if (pDialog.isShowing()) pDialog.dismiss();
+    }
+
 
     //Text_to_Speech
-
+    private void texttoSpeak(String text) {
+        if (text==null) {
+            return;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textToSpeech.speak( text, TextToSpeech.QUEUE_FLUSH, null, null );
+        } else {
+            textToSpeech.speak( text, TextToSpeech.QUEUE_FLUSH, null );
+        }
+    }
     @Override
     public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
@@ -279,33 +383,53 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e( "error", "This Language is not supported" );
             } else {
-                texttoSpeak( "" );
+                Log.e( "error", "Success.!" );
             }
         } else {
             Log.e( "error", "Failed to Initialize" );
         }
     }
-
+    @Override
+    public void onBackPressed() {
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+            textToSpeech=null;
+        }
+        if (player != null) {
+            player.stop();
+            player.release();
+            player=null;
+        }
+        super.onBackPressed();
+        this.finish();
+    }
     @Override
     public void onDestroy() {
         if (textToSpeech != null) {
             textToSpeech.stop();
             textToSpeech.shutdown();
+            textToSpeech=null;
+        }
+        if (player != null) {
+            player.stop();
+            player.release();
+            player=null;
         }
         super.onDestroy();
     }
-
-    private void texttoSpeak(String text) {
-        if ("".equals( text )) {
-            text = "";
+    @Override
+    public void onStop() {
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+            textToSpeech=null;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            textToSpeech.speak( text, TextToSpeech.QUEUE_FLUSH, null, null );
-        } else {
-            textToSpeech.speak( text, TextToSpeech.QUEUE_FLUSH, null );
+        if (player != null) {
+            player.stop();
+            player.release();
+            player=null;
         }
-        while (textToSpeech.isSpeaking()) {
-
-        }
+        super.onStop();
     }
 }

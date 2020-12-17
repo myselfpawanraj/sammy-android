@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.app.sammy.PlayerActivity;
 import com.app.sammy.R;
+import com.app.sammy.VideoSelect;
 
 public class FragHome extends Fragment {
     Button button;
@@ -24,7 +25,7 @@ public class FragHome extends Fragment {
         button.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity( new Intent( getContext(),PlayerActivity.class ) );
+                startActivity( new Intent( getContext(), VideoSelect.class ) );
             }
         } );
         return v;

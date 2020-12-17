@@ -2,9 +2,10 @@ package com.app.sammy.Models;
 
 public class TimeStamps
 {
-    String tag,time;
+    String tag;
+    Integer time;
 
-    public TimeStamps(String tag, String time) {
+    public TimeStamps(String tag, Integer time) {
         this.tag = tag;
         this.time = time;
     }
@@ -13,7 +14,7 @@ public class TimeStamps
         return tag;
     }
 
-    public String getTime() {
+    public Integer getTime() {
         return time;
     }
 }
