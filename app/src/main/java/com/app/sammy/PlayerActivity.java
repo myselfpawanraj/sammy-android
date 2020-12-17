@@ -353,7 +353,7 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading");
-        pDialog.setCancelable(true);
+        pDialog.setCancelable(false);
     }
     protected void showpDialog() {
 
