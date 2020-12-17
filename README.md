@@ -8,8 +8,8 @@ We combined OCR (Optical Character Recognition), ASR (Automatic Speech Recogniti
 
 ### Features
 
-- Retrofit networking to fetch news from the api's.
-- Hetero Recycler View to show all the news under different categories in the home screen.
+- Specially-enabled people are able to understand and navigate through video content.
+- Nobody has to spend ages searching for a single line in hour-long videos.
 
 ### Related links
 ###### [Sammy - Website](https://plytonrexus.github.io/sammy-web/)
