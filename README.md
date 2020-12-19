@@ -12,7 +12,7 @@ We combined OCR (Optical Character Recognition), ASR (Automatic Speech Recogniti
 - Nobody has to spend ages searching for a single line in hour-long videos.
 
 ### Related links
-###### [Sammy - Website](https://plytonrexus.github.io/sammy-web/)
+###### [Sammy - Slides/Presentatiom](https://docs.google.com/presentation/d/1FNzMfHjVQVPnZ-rpnFb149bxvdE5WuJT0RT1AOqp2r0/edit?usp=sharing)
 ###### [GitHub Repository - Video - Node](https://github.com/PlytonRexus/sammy-node)
 ###### [GitHub Repository - Audio - Node](https://github.com/PlytonRexus/sammy-node-audio)
 ###### [GitHub Repository - Android](https://github.com/myselfpawanraj/sammy-android)
