@@ -328,7 +328,7 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
     @Override
     public void onError(String body) {
         Toast.makeText(this, body, Toast.LENGTH_SHORT).show();
-        finish();
+//        finish();
     }
 
     @Override

@@ -83,13 +83,13 @@ public class Presenter implements Contract.Presenter {
                     } else
                         view.onSceneSuccess(s);
                 } else {
-                    view.onError("Failed! Retrying..");
+                    view.onError("Failed!");
                 }
             }
 
             @Override
             public void onFailure(Call< sceneDes > call, Throwable t) {
-                view.onError("Failed! Retrying..");
+                view.onError("Failed!");
             }
         });
     }
