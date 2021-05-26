@@ -13,9 +13,6 @@ import androidx.fragment.app.Fragment;
 import com.app.sammy.R;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static android.content.Context.MODE_PRIVATE;
 
 public class FragSettings extends Fragment {

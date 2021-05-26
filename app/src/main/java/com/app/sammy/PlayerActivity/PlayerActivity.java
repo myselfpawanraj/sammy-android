@@ -1,13 +1,10 @@
 package com.app.sammy.PlayerActivity;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,27 +12,31 @@ import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowInsets;
-import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
-import android.widget.Switch;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.sammy.Api.Api;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.app.sammy.Models.AudioRequest.AudIdReq;
 import com.app.sammy.Models.AudioRequest.Word;
 import com.app.sammy.Models.Finalrequest.Caption;
 import com.app.sammy.Models.Finalrequest.IdReq;
 import com.app.sammy.Models.TimeStamps;
-import com.app.sammy.Models.sceneDes;
 import com.app.sammy.R;
+import com.app.sammy.videoselect.VideoSelect;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -50,9 +51,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static java.lang.StrictMath.max;
 
@@ -65,7 +63,8 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
     Button sceneButton;
     @BindView(R.id.textViewSubtitles)
     TextView textViewSubtitles;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    @BindView(R.id.view_black)
+    CardView view_black;
     @BindView(R.id.switch1)
     SwitchMaterial aSwitch;
 
@@ -76,7 +75,10 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
     List< TimeStamps > list, caption;
     IdReq idReq;
     AudIdReq audIdReq;
+    AlertDialog alertDialog;
     ProgressDialog pDialog;
+    TextView status;
+    ProgressBar progressBar;
     int percentAudio, percentVideo;
 
     @Override
@@ -91,16 +93,23 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
         media_id2 = getIntent().getStringExtra("ID2");
         presenter = new Presenter(this);
 
-        initDialog();
         setSupportActionBar(findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle(Uri.parse(media_url).getLastPathSegment());
         ButterKnife.bind(this);
 
+        initDialog();
+        setChecked();
+        aSwitch.setOnClickListener(v1 -> {
+            SharedPreferences sharedPreferences = getSharedPreferences(String.valueOf(R.string.app_name),MODE_PRIVATE);
+            SharedPreferences.Editor myEdit = sharedPreferences.edit();
+            myEdit.putBoolean(String.valueOf(R.string.scene_describer_volume), aSwitch.isChecked());
+            myEdit.apply();
+        });
+
         //For fetching Data
         presenter.getVideo(media_id);
-        presenter.getAudioData(media_id2);
 
         imageButton.setOnClickListener(v -> getSpeechInput());
         sceneButton.setOnClickListener(v -> {
@@ -244,14 +253,21 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
 
     //For Loading Screen ..
     protected void initDialog() {
-        pDialog = new ProgressDialog(this);
-        pDialog.setTitle("Loading...");
-        pDialog.setCancelable(false);
-        pDialog.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(PlayerActivity.this);
+        View view = this.getLayoutInflater().inflate(R.layout.dialogue_loading, null);
+        builder.setView(view);
+
+        alertDialog = builder.create();
+        alertDialog.show();
+        view_black.setVisibility(View.VISIBLE);
+        alertDialog.setCancelable(false);
+        status = view.findViewById(R.id.text_status);
+        progressBar = view.findViewById(R.id.progressBar);
     }
 
     protected void showDialog() {
-        pDialog.setTitle(null);
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
         pDialog.setMessage("Loading...");
         if (!pDialog.isShowing()) pDialog.show();
     }
@@ -302,9 +318,7 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
                 }
 
                 @Override
-                public void onError(String utteranceId) {
-
-                }
+                public void onError(String utteranceId) { }
             });
         } else {
             Log.e("TextToSpeech", "Failed to Initialize");
@@ -323,13 +337,9 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
         updateDialogue();
         if (body.getProgress() == 100) {
             idReq = body;
+            presenter.getAudioData(media_id2);
         } else {
             presenter.getVideo(media_id);
-        }
-        if (idReq != null && audIdReq != null) {
-            hideDialog();
-            initializePlayer();
-            fillData();
         }
     }
 
@@ -339,13 +349,12 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
         updateDialogue();
         if (body.getProgress() == 100) {
             audIdReq = body;
+            alertDialog.dismiss();
+            fillData();
+            initializePlayer();
+            view_black.setVisibility(View.GONE);
         } else {
             presenter.getAudioData(media_id2);
-        }
-        if (idReq != null && audIdReq != null) {
-            hideDialog();
-            initializePlayer();
-            fillData();
         }
     }
 
@@ -355,7 +364,20 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
         textToSpeech(body);
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateDialogue() {
-        pDialog.setMessage("Video route working... " + percentVideo + "%\nAudio route working... " + percentAudio + "%");
+        if(percentVideo<100) {
+            status.setText("Video route working... " + percentVideo+ "%");
+            progressBar.setProgress(percentVideo/2);
+        }
+        else{
+            status.setText("Audio route working... " + percentAudio + "%");
+            progressBar.setProgress(50 + percentAudio/2);
+        }
+    }
+    private void setChecked() {
+        SharedPreferences sharedPreferences = getSharedPreferences(String.valueOf(R.string.app_name),MODE_PRIVATE);
+        boolean aBoolean = sharedPreferences.getBoolean(String.valueOf(R.string.scene_describer_volume), true);
+        aSwitch.setChecked(aBoolean);
     }
 }

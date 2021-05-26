@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.app.sammy.R;
-import com.app.sammy.VideoSelect;
+import com.app.sammy.videoselect.VideoSelect;
 
 public class FragHome extends Fragment {
     Button button;
