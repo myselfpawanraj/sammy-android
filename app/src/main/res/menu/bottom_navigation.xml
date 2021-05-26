@@ -8,5 +8,9 @@
         android:id="@+id/nav_about"
         android:icon="@drawable/ic_baseline_person_24"
         android:title="About Us"/>
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/exo_ic_settings"
+        android:title="Setting"/>
 
 </menu>

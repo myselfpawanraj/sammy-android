@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Sammy</string>
+    <string name="scene_describer_volume">Scene describer</string>
 </resources>
