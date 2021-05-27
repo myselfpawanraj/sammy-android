@@ -114,16 +114,30 @@ public class VideoSelect extends AppCompatActivity implements Contract {
     private void setUpRecycler() {
         List<SelectorModel> list = new ArrayList<>();
 
-        list.add(new SelectorModel("All over in 10 seconds",
+        list.add(new SelectorModel("All over",
                 "Ian Rushton",
-                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/All%20over%20in%2010%20seconds.mp4",
-                "https://github.com/myselfpawanraj/sammy-android/raw/master/samples/10_minute_img.PNG"));
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/all_over.mp4",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/all_over_img.PNG"));
 
-        list.add(new SelectorModel("All over in 10 seconds",
-                "Ian Rushton",
-                "https://github.com/myselfpawanraj/sammy-android/blob/master/samples/All%20over%20in%2010%20seconds.mp4",
-                "https://github.com/myselfpawanraj/sammy-android/raw/master/samples/10_minute_img.PNG"));
+        list.add(new SelectorModel("Beach View",
+                "Panlasang Bikol",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/beach_view.mp4",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/beach_view_img.PNG"));
 
+        list.add(new SelectorModel("Child Laugh",
+                "kacarle",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/child_laugh.mp4",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/child_laugh_img.PNG"));
+
+        list.add(new SelectorModel("Nature Video",
+                "kacarle",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/nature_video.mp4",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/nature_video_img.PNG"));
+
+        list.add(new SelectorModel("The Universe",
+                "kacarle",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/the_universe.mp4",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/the_universe_img.PNG"));
         recyclerView.setAdapter(new SelectorAdapter(this,list));
     }
     private void showLinkDialogue() {

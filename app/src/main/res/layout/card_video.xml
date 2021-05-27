@@ -44,7 +44,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textColor="#000000"
+                android:textColor="@color/white"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/textView14"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
@@ -56,6 +57,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="TextView"
+                android:textColor="@color/white"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

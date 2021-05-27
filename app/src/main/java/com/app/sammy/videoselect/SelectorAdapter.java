@@ -41,7 +41,7 @@ public class SelectorAdapter extends RecyclerView.Adapter< SelectorAdapter.ViewH
         SelectorModel model = modelList.get(position);
         Glide
                 .with(context)
-                .load(model.getImageUrl() + " ")
+                .load(model.getImageUrl())
                 .placeholder(R.drawable.music_disk)
                 .into(holder.imageView);
 
