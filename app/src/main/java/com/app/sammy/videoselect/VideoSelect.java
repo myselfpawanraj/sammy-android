@@ -114,14 +114,9 @@ public class VideoSelect extends AppCompatActivity implements Contract {
     private void setUpRecycler() {
         List<SelectorModel> list = new ArrayList<>();
 
-        list.add(new SelectorModel("Mask",
+        list.add(new SelectorModel("All over in 10 seconds",
+                "Ian Rushton",
                 "https://raw.githubusercontent.com/PlytonRexus/sammy-web/master/videoplayback.mp4",
-                " "));
-        list.add(new SelectorModel("Lego Man",
-                "https://raw.githubusercontent.com/PlytonRexus/sammy-web/master/videoplayback_2.mp4",
-                " "));
-        list.add(new SelectorModel("Mickey Mouse",
-                "https://raw.githubusercontent.com/PlytonRexus/sammy-web/master/videoplayback_3.mp4",
                 " "));
 
 

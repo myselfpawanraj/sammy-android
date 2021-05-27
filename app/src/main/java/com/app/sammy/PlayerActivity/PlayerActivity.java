@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,14 +11,10 @@ import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,7 +23,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.app.sammy.Models.AudioRequest.AudIdReq;
 import com.app.sammy.Models.AudioRequest.Word;
@@ -36,7 +30,6 @@ import com.app.sammy.Models.Finalrequest.Caption;
 import com.app.sammy.Models.Finalrequest.IdReq;
 import com.app.sammy.Models.TimeStamps;
 import com.app.sammy.R;
-import com.app.sammy.videoselect.VideoSelect;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -45,6 +38,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -94,7 +88,7 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
         presenter = new Presenter(this);
 
         setSupportActionBar(findViewById(R.id.toolbar));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle(Uri.parse(media_url).getLastPathSegment());
         ButterKnife.bind(this);
@@ -328,7 +322,8 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
     @Override
     public void onError(String body) {
         Toast.makeText(this, body, Toast.LENGTH_SHORT).show();
-//        finish();
+        if(!body.equals("Failed"))
+            finish();
     }
 
     @Override

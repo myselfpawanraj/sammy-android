@@ -46,6 +46,7 @@ public class SelectorAdapter extends RecyclerView.Adapter< SelectorAdapter.ViewH
                 .into(holder.imageView);
 
         holder.title.setText(model.getTitle());
+        holder.credit.setText(model.getCredit());
         holder.main_card.setOnClickListener(v -> contract.uploadData(model.url));
     }
 
@@ -57,11 +58,12 @@ public class SelectorAdapter extends RecyclerView.Adapter< SelectorAdapter.ViewH
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CardView main_card;
         ImageView imageView;
-        TextView title;
+        TextView title, credit;
         public ViewHolder(View view) {
             super(view);
             imageView = view.findViewById(R.id.imageView8);
-            title = view.findViewById(R.id.textView14);
+            title = view.findViewById(R.id.textView7);
+            credit = view.findViewById(R.id.textView14);
             main_card = view.findViewById(R.id.main_card);
             ButterKnife.bind(view);
         }

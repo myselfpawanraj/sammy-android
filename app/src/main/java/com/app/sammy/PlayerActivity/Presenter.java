@@ -83,7 +83,7 @@ public class Presenter implements Contract.Presenter {
                     } else
                         view.onSceneSuccess(s);
                 } else {
-                    view.onError("Failed!");
+                    view.onError("Failed");
                 }
             }
 
