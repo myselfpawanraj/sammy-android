@@ -116,9 +116,13 @@ public class VideoSelect extends AppCompatActivity implements Contract {
 
         list.add(new SelectorModel("All over in 10 seconds",
                 "Ian Rushton",
-                "https://raw.githubusercontent.com/PlytonRexus/sammy-web/master/videoplayback.mp4",
-                " "));
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/All%20over%20in%2010%20seconds.mp4",
+                "https://github.com/myselfpawanraj/sammy-android/raw/master/samples/10_minute_img.PNG"));
 
+        list.add(new SelectorModel("All over in 10 seconds",
+                "Ian Rushton",
+                "https://github.com/myselfpawanraj/sammy-android/blob/master/samples/All%20over%20in%2010%20seconds.mp4",
+                "https://github.com/myselfpawanraj/sammy-android/raw/master/samples/10_minute_img.PNG"));
 
         recyclerView.setAdapter(new SelectorAdapter(this,list));
     }
