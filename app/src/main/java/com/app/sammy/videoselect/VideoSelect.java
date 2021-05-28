@@ -90,7 +90,7 @@ public class VideoSelect extends AppCompatActivity implements Contract {
             @Override
             public void onFailure(Call<Responce> call, Throwable t) {
                 hideDialog();
-                Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -130,12 +130,12 @@ public class VideoSelect extends AppCompatActivity implements Contract {
                 "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/child_laugh_img.PNG"));
 
         list.add(new SelectorModel("Nature Video",
-                "kacarle",
+                "BBC",
                 "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/nature_video.mp4",
                 "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/nature_video_img.PNG"));
 
         list.add(new SelectorModel("The Universe",
-                "kacarle",
+                "Benjamin Heinen",
                 "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/the_universe.mp4",
                 "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/the_universe_img.PNG"));
         recyclerView.setAdapter(new SelectorAdapter(this,list));

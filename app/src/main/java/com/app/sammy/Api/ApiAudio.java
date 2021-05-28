@@ -13,7 +13,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public class ApiAudio {
-    private static final String BASE_URL = "https://sammy-audio.herokuapp.com/";
+    private static final String BASE_URL = "http://20.198.117.128:5000/";
 
     public static PostService postService = null;
     public static PostService getService()

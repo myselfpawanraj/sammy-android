@@ -15,7 +15,7 @@
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_cancel_24" />
+        android:src="@drawable/ic_baseline_cancel_24" />
 
     <TextView
         android:id="@+id/textView3"
@@ -47,14 +47,15 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="32dp"
         android:ems="10"
-        android:hint="https://raw.githubusercontent.com/.."
+        android:hint="@string/github_hint"
         android:inputType="textUri|none"
         android:textColor="@color/white"
         android:textColorHint="#AFA5A5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/linkButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        android:autofillHints="" />
 
     <ImageButton
         android:id="@+id/linkButton"
@@ -66,5 +67,5 @@
         android:src="@drawable/upload"
         app:layout_constraintBottom_toBottomOf="@+id/editText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText" />
+        app:layout_constraintTop_toTopOf="@+id/editText"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

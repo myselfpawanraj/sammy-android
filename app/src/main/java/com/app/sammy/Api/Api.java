@@ -26,7 +26,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public class Api {
-    private static final String BASE_URL = "https://sm-web2.herokuapp.com/";
+    private static final String BASE_URL = "http://20.198.117.128:5001/";
 
     public static PostService postService = null;
     public static PostService getService()

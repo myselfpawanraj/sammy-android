@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Sammy</string>
     <string name="scene_describer_volume">Scene describer</string>
+    <string name="github_hint">https://raw.githubusercontent.com/..</string>
+    <string name="drop_us_a_line">Drop us a line!</string>
+    <string name="sammy_android">/sammy-android</string>
+    <string name="sammy_audio_node">/sammy-audio-node</string>
+    <string name="sammy_video_node">/sammy-video-node</string>
+    <string name="pawan_raj_amp_mihir_jichkar"><![CDATA[Pawan Raj & Mihir Jichkar]]></string>
+    <string name="by">By</string>
 </resources>

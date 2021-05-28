@@ -89,7 +89,7 @@ public class Presenter implements Contract.Presenter {
 
             @Override
             public void onFailure(Call< sceneDes > call, Throwable t) {
-                view.onError("Failed!");
+                view.onError("Failed");
             }
         });
     }

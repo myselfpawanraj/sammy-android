@@ -8,16 +8,16 @@ public class Word {
 
     @SerializedName("time")
     @Expose
-    private Integer time;
+    private long time;
     @SerializedName("word")
     @Expose
     private String word;
 
-    public Integer getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(Integer time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

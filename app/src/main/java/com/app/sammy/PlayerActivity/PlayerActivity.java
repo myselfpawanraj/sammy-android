@@ -145,24 +145,25 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
 
         if (wordList != null)
             for (Word word : wordList) {
-                list.add(new TimeStamps(word.getWord(), word.getTime()));
+                if(word.getWord()!=null) list.add(new TimeStamps(word.getWord(), word.getTime()));
             }
 
         if (captionList != null)
             for (Caption c : captionList) {
-                list.add(new TimeStamps(c.getOcr(), c.getTime()));
-                caption.add(new TimeStamps(c.getCaptions(), c.getTime()));
+                if(c.getOcr()!=null) list.add(new TimeStamps(c.getOcr(), c.getTime()));
+                if(c.getCaptions()!=null) caption.add(new TimeStamps(c.getCaptions(), c.getTime()));
                 for (String s : c.getTags())
-                    list.add(new TimeStamps(s, c.getTime()));
+                    if(s!=null) list.add(new TimeStamps(s, c.getTime()));
             }
     }
 
+    @SuppressLint("SetTextI18n")
     private void speakCaptions() {
         if (player == null || !player.isPlaying() || aSwitch == null || !aSwitch.isChecked())
             return;
         for (TimeStamps t : caption) {
             if (player.getContentPosition() >= t.getTime() && (player.getContentPosition() - 1000) <= t.getTime()) {
-                textViewSubtitles.setText(t.getTag());
+                runOnUiThread(() -> textViewSubtitles.setText(t.getTag()+" "));
                 if (t.getTag().toLowerCase().contains("text") || t.getTag().toLowerCase().contains("logo")) {
                     List< Caption > captionList = idReq.getResponseFinal().getCaptions();
                     for (Caption c : captionList) {
