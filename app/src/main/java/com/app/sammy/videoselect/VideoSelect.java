@@ -114,6 +114,17 @@ public class VideoSelect extends AppCompatActivity implements Contract {
     private void setUpRecycler() {
         List<SelectorModel> list = new ArrayList<>();
 
+        list.add(new SelectorModel("The Queen's Gambit",
+                "Credit: Netflix",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/queen_gambit.mp4",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/queen_gambit_img.PNG"));
+
+
+        list.add(new SelectorModel("Subaru Outback",
+                "Subaru",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/subaru.mp4",
+                "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/subaru_img.PNG"));
+
         list.add(new SelectorModel("All over",
                 "Ian Rushton",
                 "https://raw.githubusercontent.com/myselfpawanraj/sammy-android/master/samples/all_over.mp4",

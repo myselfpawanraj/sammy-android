@@ -20,12 +20,13 @@
 
     <Button
         android:id="@+id/button_upload"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:text="Upload file"
+        android:textSize="12sp"
         app:backgroundTint="@color/teal_700"
         app:cornerRadius="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,10 +34,11 @@
 
     <Button
         android:id="@+id/button_link"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="Custom Link"
+        android:textSize="12sp"
         app:backgroundTint="@color/teal_200"
         app:cornerRadius="100dp"
         app:layout_constraintBottom_toTopOf="@+id/button_upload"
