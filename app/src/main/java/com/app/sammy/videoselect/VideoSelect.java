@@ -31,6 +31,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +56,7 @@ public class VideoSelect extends AppCompatActivity implements Contract {
         ButterKnife.bind(this);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar2));
-        getSupportActionBar().setTitle("Select Media");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Select Media");
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setUpRecycler();

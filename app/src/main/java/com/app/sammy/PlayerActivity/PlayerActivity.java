@@ -46,6 +46,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static java.lang.StrictMath.abs;
 import static java.lang.StrictMath.max;
 
 public class PlayerActivity extends AppCompatActivity implements TextToSpeech.OnInitListener, Contract.View {
@@ -161,20 +162,28 @@ public class PlayerActivity extends AppCompatActivity implements TextToSpeech.On
     private void speakCaptions() {
         if (player == null || !player.isPlaying() || aSwitch == null || !aSwitch.isChecked())
             return;
+
+        boolean done = false;
         for (TimeStamps t : caption) {
             if (player.getContentPosition() >= t.getTime() && (player.getContentPosition() - 1000) <= t.getTime()) {
                 runOnUiThread(() -> textViewSubtitles.setText(t.getTag()+" "));
                 if (t.getTag().toLowerCase().contains("text") || t.getTag().toLowerCase().contains("logo")) {
                     List< Caption > captionList = idReq.getResponseFinal().getCaptions();
                     for (Caption c : captionList) {
-                        if (c.getTime().equals(t.getTime())) {
+                        if (abs(c.getTime() - t.getTime()) < 1000) {
                             textToSpeech(c.getOcr());
+                            done = true;
                             break;
                         }
                     }
                 } else {
                     textToSpeech(t.getTag());
+                    done = true;
+                    break;
                 }
+            }
+            if(done) {
+                break;
             }
         }
     }
