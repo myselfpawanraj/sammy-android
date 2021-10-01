@@ -1,4 +1,4 @@
-# Sammy
+## Sammy
 #### *Accessibility Media Player*
 
 Sammy is a smart media player, that enables understanding of videos for the visually-disabled and quicker navigation for everyone
@@ -69,6 +69,3 @@ Sammy uses a number of open source projects to work properly:
 
 ***
 ##### You can run this Android app on [Appetize.io](https://appetize.io/app/byzq870wtf7b92qna9wt5hmubc?device=pixel4&scale=75&orientation=portrait&osVersion=10.0&deviceColor=black)
-
-### Author
-[Pawan Raj](https://github.com/myselfpawanraj)
