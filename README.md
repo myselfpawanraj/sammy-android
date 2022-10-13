@@ -68,4 +68,8 @@ Sammy uses several open-source projects to work properly:
 - ###### [Sammy - Slides/Presentatiom](https://docs.google.com/presentation/d/1FNzMfHjVQVPnZ-rpnFb149bxvdE5WuJT0RT1AOqp2r0/edit?usp=sharing)
 
 ***
+
+##### Contributors
+[https://www.github.com/myselfpawanraj]
+
 ##### You can run this Android app on [Appetize.io](https://appetize.io/app/byzq870wtf7b92qna9wt5hmubc?device=pixel4&scale=75&orientation=portrait&osVersion=10.0&deviceColor=black)
